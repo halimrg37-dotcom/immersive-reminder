@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immersive Reminder - Smart Task Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- AUTH SCREEN -->
+        <div id="authScreen" class="auth-screen">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h1>⏰ Immersive Reminder</h1>
+                    <p>Smart Task & Reminder Management System</p>
+                    <div id="authTabs" class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login">Login</button>
+                        <button class="auth-tab" data-tab="register">Register</button>
+                    </div>
+
+                    <!-- LOGIN FORM -->
+                    <form id="loginForm" class="auth-form active">
+                        <div class="form-field">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" placeholder="Enter password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width">Login</button>
+                    </form>
+
+                    <!-- REGISTER FORM -->
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-field">
+                            <label for="registerName">Full Name</label>
+                            <input type="text" id="registerName" placeholder="Your name" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" placeholder="Min 6 characters" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="registerConfirm">Confirm Password</label>
+                            <input type="password" id="registerConfirm" placeholder="Confirm password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary full-width">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN APP (Hidden until logged in) -->
+        <div id="appScreen" class="app-screen" style="display: none;">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <h1>⏰ Immersive Reminder</h1>
+                        <p>Smart Task & Reminder Management System</p>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-info">
+                            <span id="currentUser"></span>
+                            <span id="currentRoom"></span>
+                        </div>
+                        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Room Selection -->
+            <section class="room-section">
+                <h3>Current Room</h3>
+                <div class="room-controls">
+                    <select id="roomSelect" class="room-select">
+                        <option value="">Select or Create Room</option>
+                    </select>
+                    <button id="createRoomBtn" class="btn btn-secondary">+ Create Room</button>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <h2>Create New Reminder</h2>
+                <form id="reminderForm" class="form-group">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="taskName">Task Name</label>
+                            <input type="text" id="taskName" placeholder="Enter task name" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="priority">Priority</label>
+                            <select id="priority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="dueDate">Due Date & Time</label>
+                            <input type="datetime-local" id="dueDate" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="category">Category</label>
+                            <select id="category">
+                                <option value="work">Work</option>
+                                <option value="personal">Personal</option>
+                                <option value="health">Health</option>
+                                <option value="study">Study</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-field full-width">
+                        <label for="description">Description</label>
+                        <textarea id="description" placeholder="Add task description..." rows="3"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="recurring">
+                            <span>Recurring Reminder</span>
+                        </label>
+                        <select id="recurrenceType" style="display:none;">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">+ Create Reminder</button>
+                </form>
+            </section>
+
+            <!-- Filters & Stats -->
+            <section class="filters-section">
+                <div class="stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="totalReminders">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="activeReminders">0</span>
+                        <span class="stat-label">Active</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="completedReminders">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="active">Active</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                    <button class="filter-btn" data-filter="high">High Priority</button>
+                </div>
+            </section>
+
+            <!-- Reminders Display -->
+            <section class="reminders-section">
+                <h2>Your Reminders</h2>
+                <div id="remindersList" class="reminders-grid">
+                    <div class="empty-state">
+                        <p>📝 No reminders yet. Create your first reminder above!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+            <!-- Notification -->
+            <div id="notification" class="notification"></div>
+
+            <!-- Modal for editing reminders -->
+            <div id="editModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Edit Reminder</h2>
+                    <form id="editForm" class="form-group">
+                        <input type="hidden" id="editId">
+                        <div class="form-field">
+                            <label for="editTaskName">Task Name</label>
+                            <input type="text" id="editTaskName" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="editDescription">Description</label>
+                            <textarea id="editDescription" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="editDueDate">Due Date & Time</label>
+                                <input type="datetime-local" id="editDueDate" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="editPriority">Priority</label>
+                                <select id="editPriority">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal for creating room -->
+            <div id="createRoomModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeCreateRoomModal()">&times;</span>
+                    <h2>Create New Room</h2>
+                    <form id="createRoomForm" class="form-group">
+                        <div class="form-field">
+                            <label for="roomName">Room Name</label>
+                            <input type="text" id="roomName" placeholder="e.g., Team Project, Family Tasks" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="roomDescription">Description</label>
+                            <textarea id="roomDescription" placeholder="What is this room for?" rows="3"></textarea>
+                        </div>
+                        <div class="form-field">
+                            <label for="roomType">Room Type</label>
+                            <select id="roomType">
+                                <option value="personal">Personal</option>
+                                <option value="shared">Shared</option>
+                                <option value="team">Team</option>
+                            </select>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="submit" class="btn btn-primary">Create Room</button>
+                            <button type="button" class="btn btn-secondary" onclick="closeCreateRoomModal()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
